@@ -1,0 +1,15 @@
+SELECT DISTINCT ?person ?personLabel WHERE {
+  {
+    wd:Q857351 wdt:P527 ?edition .
+    { ?edition wdt:P710 ?person . }
+    UNION
+    { ?edition wdt:P1346 ?person . }
+  }
+  UNION
+  { wd:Q857351 wdt:P1346 ?person . }
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en,[AUTO_LANGUAGE]" .
+  }
+}
+ORDER BY ?person

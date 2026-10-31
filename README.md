@@ -1,6 +1,6 @@
 # Teacher links among Chopin Competition pianists, as stated by Wikidata
 
-Piano-performance undergraduate project, prepared while applying for the MSc in Social Computing at Xi'an Jiaotong-Liverpool University.
+An independent computational-musicology project about data provenance, missingness, and network interpretation.
 
 The question is narrow: among people Wikidata lists for the International Chopin Piano Competition, which teacher relationships are actually recorded, and what does that pattern of recording show?
 
@@ -15,7 +15,16 @@ The extract was downloaded on 30 October 2026 from Wikidata.
 
 No teacher was added from a biography, a recording note, or memory. If a well-known lesson is missing, Wikidata did not state it on this date.
 
-The saved extract contains 144 roster people and 129 teacher links to 98 teachers. Of the 144, 65 have at least one teacher statement and 79 have none.
+The saved extract contains 144 roster people and 129 teacher links to 98 teachers. Of the 144, 65 have at least one teacher statement and 79 have none. This is a dated observational snapshot, not a complete history of piano pedagogy.
+
+## Reproducibility and provenance
+
+There are two deliberately separate workflows:
+
+1. `python analysis.py` reproduces the published tables and figure from the dated CSV snapshot in `data/`.
+2. `python extract_wikidata.py` reruns the versioned SPARQL logic against live Wikidata and writes a **new** snapshot to `data/refresh/`.
+
+Live Wikidata changes, so a refresh may not reproduce the 30 October 2026 counts. The refresh script records retrieval time, endpoint, counts, and query hashes in `metadata.json`; it does not overwrite the saved application snapshot. The query files document the roster and `student of` rules, while each saved row retains its Wikidata QID for inspection.
 
 ## What the numbers mean
 
@@ -50,15 +59,23 @@ Treating each link as an undirected tie gives 105 components. Most roster people
 chopin-competition-teacher-network/
 ├── data/nodes.csv              # 144 roster people plus the teachers they name
 ├── data/edges.csv              # 129 student-of links copied from Wikidata
+├── queries/roster.rq           # competition roster query
+├── queries/teacher_links.rq    # roster-to-teacher query
 ├── output/summary.csv          # coverage and component counts
 ├── output/teacher_degree.csv   # how many roster people name each teacher
 ├── output/core_teachers.svg    # the four teachers with three or more links
+├── tests/test_snapshot.py      # integrity checks for the dated snapshot
+├── extract_wikidata.py         # creates a separate live-data refresh
 ├── analysis.py                 # recomputes the output from the CSV files
 └── README.md
 ```
 
 ```powershell
 python analysis.py
+python -m unittest discover -s tests -v
+
+# Optional: query current Wikidata without changing data/
+python extract_wikidata.py --output-dir data/refresh
 ```
 
-The script does not download Wikidata again. The CSV files are the extract.
+`analysis.py` never downloads Wikidata; the CSV files are the fixed input to the reported analysis.

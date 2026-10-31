@@ -1,0 +1,17 @@
+SELECT DISTINCT ?student ?studentLabel ?teacher ?teacherLabel WHERE {
+  {
+    wd:Q857351 wdt:P527 ?edition .
+    { ?edition wdt:P710 ?student . }
+    UNION
+    { ?edition wdt:P1346 ?student . }
+  }
+  UNION
+  { wd:Q857351 wdt:P1346 ?student . }
+
+  ?student wdt:P1066 ?teacher .
+
+  SERVICE wikibase:label {
+    bd:serviceParam wikibase:language "en,[AUTO_LANGUAGE]" .
+  }
+}
+ORDER BY ?student ?teacher
