@@ -79,7 +79,7 @@ def main() -> None:
         person_qid = qid(row["person"]["value"])
         roster[person_qid] = label(row, "personLabel", person_qid)
 
-    edge_map: Dict[tuple[str, str], Dict[str, str]] = {}
+    edge_map: Dict[tuple[str, str], Dict[str, object]] = {}
     teachers: Dict[str, str] = {}
     for row in teacher_bindings:
         student_qid = qid(row["student"]["value"])
@@ -88,12 +88,28 @@ def main() -> None:
         teacher_name = label(row, "teacherLabel", teacher_qid)
         roster.setdefault(student_qid, student_name)
         teachers[teacher_qid] = teacher_name
-        edge_map[(student_qid, teacher_qid)] = {
-            "student_qid": student_qid,
-            "student_name": student_name,
-            "teacher_qid": teacher_qid,
-            "teacher_name": teacher_name,
-        }
+        edge_key = (student_qid, teacher_qid)
+        edge = edge_map.setdefault(
+            edge_key,
+            {
+                "student_qid": student_qid,
+                "student_name": student_name,
+                "teacher_qid": teacher_qid,
+                "teacher_name": teacher_name,
+                "statement_urls": set(),
+                "statement_ranks": set(),
+                "reference_urls": set(),
+            },
+        )
+        statement_url = row.get("statement", {}).get("value", "")
+        rank_uri = row.get("rank", {}).get("value", "")
+        reference_url = row.get("reference", {}).get("value", "")
+        if statement_url:
+            edge["statement_urls"].add(statement_url)
+        if rank_uri:
+            edge["statement_ranks"].add(rank_uri.rsplit("#", 1)[-1])
+        if reference_url:
+            edge["reference_urls"].add(reference_url)
 
     all_qids = sorted(set(roster) | set(teachers))
     node_rows = []
@@ -111,12 +127,33 @@ def main() -> None:
             }
         )
 
-    edge_rows = [edge_map[key] for key in sorted(edge_map)]
+    edge_rows = []
+    for key in sorted(edge_map):
+        raw = edge_map[key]
+        edge_rows.append(
+            {
+                "student_qid": raw["student_qid"],
+                "student_name": raw["student_name"],
+                "teacher_qid": raw["teacher_qid"],
+                "teacher_name": raw["teacher_name"],
+                "statement_urls": "|".join(sorted(raw["statement_urls"])),
+                "statement_ranks": "|".join(sorted(raw["statement_ranks"])),
+                "reference_count": len(raw["reference_urls"]),
+            }
+        )
     output_dir = Path(args.output_dir)
     write_csv(output_dir / "nodes.csv", ["qid", "name", "role", "wikidata_url"], node_rows)
     write_csv(
         output_dir / "edges.csv",
-        ["student_qid", "student_name", "teacher_qid", "teacher_name"],
+        [
+            "student_qid",
+            "student_name",
+            "teacher_qid",
+            "teacher_name",
+            "statement_urls",
+            "statement_ranks",
+            "reference_count",
+        ],
         edge_rows,
     )
 
@@ -128,6 +165,9 @@ def main() -> None:
         "roster_people": len(roster),
         "teacher_links": len(edge_rows),
         "distinct_teachers": len(teachers),
+        "teacher_links_with_references": sum(
+            int(row["reference_count"]) > 0 for row in edge_rows
+        ),
         "roster_query_sha256": hashlib.sha256(roster_query.encode()).hexdigest(),
         "teacher_query_sha256": hashlib.sha256(teacher_query.encode()).hexdigest(),
         "note": "Wikidata is live; refreshed results may differ from the saved 2026-10-30 snapshot.",

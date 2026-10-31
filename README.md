@@ -24,7 +24,9 @@ There are two deliberately separate workflows:
 1. `python analysis.py` reproduces the published tables and figure from the dated CSV snapshot in `data/`.
 2. `python extract_wikidata.py` reruns the versioned SPARQL logic against live Wikidata and writes a **new** snapshot to `data/refresh/`.
 
-Live Wikidata changes, so a refresh may not reproduce the 30 October 2026 counts. The refresh script records retrieval time, endpoint, counts, and query hashes in `metadata.json`; it does not overwrite the saved application snapshot. The query files document the roster and `student of` rules, while each saved row retains its Wikidata QID for inspection.
+Live Wikidata changes, so a refresh may not reproduce the 30 October 2026 counts. The refresh script records retrieval time, endpoint, counts, and query hashes in `metadata.json`; it does not overwrite the saved application snapshot. The query files document the roster and `student of` rules, while each refreshed edge also records the Wikidata statement URL, statement rank, and number of attached reference records. A reference count of zero is a warning to verify the relationship independently, not evidence that it is false.
+
+An audit run on 31 October 2026 found an attached Wikidata reference record for 35 of the 129 P1066 links; 94 had no attached reference. Consequently, this project makes the narrow, reproducible claim that these relationships were **stated in Wikidata**, not that all 129 have been independently verified as historical facts.
 
 ## What the numbers mean
 

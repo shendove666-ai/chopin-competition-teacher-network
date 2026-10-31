@@ -1,4 +1,7 @@
-SELECT DISTINCT ?student ?studentLabel ?teacher ?teacherLabel WHERE {
+PREFIX prov: <http://www.w3.org/ns/prov#>
+
+SELECT DISTINCT ?student ?studentLabel ?teacher ?teacherLabel
+                ?statement ?rank ?reference WHERE {
   {
     wd:Q857351 wdt:P527 ?edition .
     { ?edition wdt:P710 ?student . }
@@ -8,7 +11,12 @@ SELECT DISTINCT ?student ?studentLabel ?teacher ?teacherLabel WHERE {
   UNION
   { wd:Q857351 wdt:P1346 ?student . }
 
-  ?student wdt:P1066 ?teacher .
+  # Use the full statement path instead of wdt:P1066 so the refresh can audit
+  # rank and references as well as the student-teacher value.
+  ?student p:P1066 ?statement .
+  ?statement ps:P1066 ?teacher ;
+             wikibase:rank ?rank .
+  OPTIONAL { ?statement prov:wasDerivedFrom ?reference . }
 
   SERVICE wikibase:label {
     bd:serviceParam wikibase:language "en,[AUTO_LANGUAGE]" .
