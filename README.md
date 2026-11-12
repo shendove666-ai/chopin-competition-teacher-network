@@ -4,6 +4,12 @@ An independent computational-musicology project about data provenance, missingne
 
 The question is narrow: among people Wikidata lists for the International Chopin Piano Competition, which teacher relationships are actually recorded, and what does that pattern of recording show?
 
+## Portfolio snapshot
+
+The dated Wikidata extract contains 144 competition-roster people and 129 stated student–teacher links; only 65 roster people have at least one teacher statement. This makes missingness part of the finding, not a gap to fill with guessed relationships. The figure below shows the four teachers linked to at least three roster people in this extract.
+
+![Teachers linked to at least three people in this extract](output/core_teachers.svg)
+
 ## What was retrieved
 
 The extract was downloaded on 30 October 2026 from Wikidata.
@@ -42,8 +48,6 @@ Four teachers are linked to at least three roster people:
 | Jacques Rouvier | 4 | [Q1365596](https://www.wikidata.org/wiki/Q1365596) |
 | Katarzyna Popowa-Zydroń | 4 | [Q748228](https://www.wikidata.org/wiki/Q748228) |
 | Arturo Benedetti Michelangeli | 3: Martha Argerich, Maurizio Pollini, Adam Harasiewicz | [Q318633](https://www.wikidata.org/wiki/Q318633) |
-
-![Teachers linked to at least three people in this extract](output/core_teachers.svg)
 
 The full list is `output/teacher_degree.csv`. Every name links back to a Wikidata item.
 
