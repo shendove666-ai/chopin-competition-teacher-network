@@ -1,0 +1,13 @@
+metric,value
+retrieved,2026-10-30
+source,Wikidata Q857351
+roster_people,144
+roster_with_teacher,65
+roster_without_teacher,79
+teacher_links,129
+distinct_teachers,98
+teachers_with_2_or_more,24
+teachers_with_3_or_more,4
+components,105
+components_of_at_least_2,32
+largest_component,31
