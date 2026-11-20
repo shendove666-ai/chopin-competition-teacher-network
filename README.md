@@ -6,7 +6,7 @@ The question is narrow: among people Wikidata lists for the International Chopin
 
 ## Portfolio snapshot
 
-The dated Wikidata extract contains 144 competition-roster people and 129 stated student–teacher links; only 65 roster people have at least one teacher statement. Wikidata listed at least one teacher for 65 of the 144 pianists in this snapshot, about 45%. The figure shows the four teachers linked to at least three pianists on the roster. The figure below shows the four teachers linked to at least three roster people in this extract.
+The 30 October 2026 Wikidata snapshot contains 129 student–teacher pairs involving 98 distinct teachers, with at least one recorded teacher link for 65 of 144 roster members (45.14%). The figure shows the four teachers linked to at least three roster members in this extract.
 
 ![Teachers linked to at least three people in this extract](output/core_teachers.svg)
 
@@ -34,7 +34,7 @@ There are two deliberately separate workflows:
 
 Live Wikidata changes, so a refresh can produce different counts. The refresh script records the UTC time at the end of the export, endpoint, counts, and query hashes in `metadata.json`; it does not overwrite the saved application snapshot when using the default output directory. The query files document the roster and `student of` rules, while each refreshed edge also records the Wikidata statement URL, statement rank, and number of distinct attached Wikidata reference nodes for the pair. Statement URLs and ranks are stored as separate sets, so the edge table cannot identify which reference or rank belongs to each individual statement. A reference count of zero indicates that the query returned no attached reference node. Assessing the historical claim requires a source audit.
 
-A separate audit on 31 October 2026 reported attached Wikidata references for 35 of 129 links. The audit inputs are absent from this repository. The saved CSVs reproduce the network counts above. The saved four-column edge table has no reference fields, and the inputs of that audit are not included here. The graph supports a claim about retrieved Wikidata statements. Historical verification requires examining the underlying statement and its sources.
+The archived edge table supports the reported pair and coverage counts, while reproducing the separate reference audit requires statement-level reference records.
 
 ## What the numbers mean
 
