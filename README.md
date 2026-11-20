@@ -1,14 +1,16 @@
 # Teacher links among Chopin Competition pianists, as stated by Wikidata
 
-An independent computational-musicology project about data provenance, missingness, and network interpretation.
+Which Chopin Competition pianists shared a teacher, and how many have a teacher listed in Wikidata? This project maps the recorded links and measures how much of the roster they cover.
 
 The question is narrow: among people Wikidata lists for the International Chopin Piano Competition, which teacher relationships are actually recorded, and what does that pattern of recording show?
 
 ## Portfolio snapshot
 
-The dated Wikidata extract contains 144 competition-roster people and 129 stated student–teacher links; only 65 roster people have at least one teacher statement. The remaining 79 tell us about the coverage of the recorded relationships. The figure below shows the four teachers linked to at least three roster people in this extract.
+The dated Wikidata extract contains 144 competition-roster people and 129 stated student–teacher links; only 65 roster people have at least one teacher statement. Wikidata listed at least one teacher for 65 of the 144 pianists in this snapshot, about 45%. The figure shows the four teachers linked to at least three pianists on the roster. The figure below shows the four teachers linked to at least three roster people in this extract.
 
 ![Teachers linked to at least three people in this extract](output/core_teachers.svg)
+
+See the teacher counts below for a text version of the figure.
 
 ## What was retrieved
 
@@ -32,13 +34,13 @@ There are two deliberately separate workflows:
 
 Live Wikidata changes, so a refresh can produce different counts. The refresh script records the UTC time at the end of the export, endpoint, counts, and query hashes in `metadata.json`; it does not overwrite the saved application snapshot when using the default output directory. The query files document the roster and `student of` rules, while each refreshed edge also records the Wikidata statement URL, statement rank, and number of distinct attached Wikidata reference nodes for the pair. Statement URLs and ranks are stored as separate sets, so the edge table cannot identify which reference or rank belongs to each individual statement. A reference count of zero indicates that the query returned no attached reference node. Assessing the historical claim requires a source audit.
 
-The project records a separate reference audit dated 31 October 2026, with 35 of the 129 P1066 links reported as having an attached reference and 94 as having none. The saved four-column edge table has no reference fields, and the inputs of that audit are not included here. The graph supports a claim about retrieved Wikidata statements. Historical verification requires examining the underlying statement and its sources.
+A separate audit on 31 October 2026 reported attached Wikidata references for 35 of 129 links. The audit inputs are absent from this repository. The saved CSVs reproduce the network counts above. The saved four-column edge table has no reference fields, and the inputs of that audit are not included here. The graph supports a claim about retrieved Wikidata statements. Historical verification requires examining the underlying statement and its sources.
 
 ## What the numbers mean
 
 `python analysis.py` recomputes these figures from `data/nodes.csv` and `data/edges.csv`.
 
-Teacher counts are not a ranking of historical importance. Older laureates are often missing a teacher statement, while some recent participants have several. A teacher can therefore stand high in this extract because the page is detailed, not because that teacher shaped the competition.
+Teacher counts are not a ranking of historical importance. Teacher records vary in detail across the roster. A teacher’s count can depend on how thoroughly their students’ entries are documented. A teacher can therefore stand high in this extract because the page is detailed, not because that teacher shaped the competition.
 
 Four teachers are linked to at least three roster people:
 
